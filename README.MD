@@ -1,31 +1,68 @@
 # Offline Proxy
-This repository contains the source code of the DLL proxy that is used by the Brave Frontier offline mod to allow
-connection to a local server, as well as embedding the offline server itself.
+
+This repository contains the source code for a DLL proxy used by the Brave Frontier offline mod. The proxy enables connection to a local server and embeds the offline server itself.
+
+## Overview
+The offline proxy is designed to facilitate offline gameplay for Brave Frontier by routing connections to a local server instead of the online service. This project is tailored for Windows users and includes specific compatibility and build requirements.
 
 ## Compatibility
-The proxy only works for Windows 8+ 32-bit
+- **Operating System**: Windows 8 or later (32-bit only)
 
 ## Requirements
-- Visual Studio 2022 or MinGW
-- CMake 3.20 or later
+To build the offline proxy, you’ll need the following tools:
+- **Compiler**: Visual Studio 2022 or MinGW
+- **Build System**: CMake 3.20 or later
+- **Dependencies**: Ensure `vcpkg` is installed and configured (see Building section for details), with `libcurl` available.
 
-## Building
-1. Clone this repository
-2. Setup an environment variable called "VCPKG_ROOT" that points to your vcpkg home directory
-3. Create a build directory
-4. Go to the build directory with your favioute shell
-5. Run cmake `cmake --preset (selected preset) ../`
+## Building the Offline Proxy
+Follow these steps to clone, configure, and build the offline proxy. This will generate `libcurl.dll`, which is necessary for the proxy to function.
 
-You will find libcurl.dll inside the bin/ directory of your build directory.
+1. **Clone the Repository**  
+   Use Git to clone the repository:
+   ```bash
+   git clone https://github.com/decompfrontier/offline-proxy
+   ```
 
-### Presets
+2. **Set Up the Build Directory**  
+   Create and navigate to a build directory within the cloned repository:
+   ```bash
+   cd offline-proxy
+   mkdir build
+   cd build
+   ```
 
-| Name | Description |
-| ---- | ----------- |
-| deploy-vs | Configuration for deployment to the BF client using Visual Studio as a compiler |
-| deploy-mingw | Configuration for deployment to the BF client using MinGW as a compiler |
-| debug-vs | Configuration for testing the BF client with a local server using Visual Studio as a compiler |
-| debug-mingw | Configuration for testing the BF client with a local server using MinGW as a compiler |
+3. **Configure the Build with CMake**  
+   Use CMake with a preset to configure the project. For testing with Visual Studio 2022, run:
+   ```bash
+   cmake --preset debug-vs ../
+   ```
+   - This preset is ideal for testing the Brave Frontier (BF) client with a local server using Visual Studio.
+
+4. **Build the Project**  
+   Compile the project to generate `libcurl.dll`:
+   ```bash
+   cmake --build . --config Debug
+   ```
+   - After a successful build, you’ll find `libcurl.dll` in the `bin/` directory of your `build` folder.
+
+### Build Presets
+CMake presets allow you to configure the build for different purposes and compilers. Choose the preset that matches your needs:
+
+| Preset Name     | Description                                                                 |
+|-----------------|-------------------------------------------------------------------------|
+| `deploy-vs`     | Configuration for deploying to the BF client using Visual Studio as the compiler |
+| `deploy-mingw`  | Configuration for deploying to the BF client using MinGW as the compiler      |
+| `debug-vs`      | Configuration for testing the BF client with a local server using Visual Studio |
+| `debug-mingw`   | Configuration for testing the BF client with a local server using MinGW       |
+
+- **Note**: The `debug-vs` preset (used in the example above) is recommended for initial testing and development. Adjust the preset and configuration (`Debug` or `RelWithDebInfo`) based on your deployment or testing needs.
+
+## Next Steps: Building the Game Client
+Once you’ve successfully built the offline proxy and obtained `libcurl.dll`, refer to the Brave Frontier offline mod documentation for instructions on integrating the proxy with the game client and setting up the local server. This typically involves:
+- Copying `libcurl.dll` to the appropriate directory in your Brave Frontier installation.
+- Configuring the game to connect to your local server (details vary by mod version and setup).
+
+For specific guidance, consult the Brave Frontier offline mod’s official repository or community forums.
 
 ## License
-GNU Affero General Public License 3.0 or greater.
+This project is licensed under the GNU Affero General Public License (AGPL) 3.0 or later. For more details, see the `LICENSE` file in the repository.
