@@ -1,10 +1,13 @@
+configure_file("${CMAKE_CURRENT_LIST_DIR}/serverconfig.h.cmake" "${CMAKE_CURRENT_BINARY_DIR}/generated/serverconfig.h")
+
 add_library(offlineproxy SHARED
     main.cpp
     curl_exp.cpp
     Source.def
-    #Resource.rc # dio porco
+    #Resource.rc
     resource.h
     pch.h
+    "${CMAKE_CURRENT_BINARY_DIR}/generated/serverconfig.h"
 )
 
 target_precompile_headers(offlineproxy PRIVATE pch.cpp)
@@ -21,4 +24,4 @@ set_target_properties(offlineproxy PROPERTIES
 )
 
 target_compile_definitions(offlineproxy PRIVATE -D_UNICODE -D_WIN32_WINNT=0x601)
-
+target_include_directories(offlineproxy PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/generated")

@@ -30,5 +30,17 @@ endif()
 
 find_package(CURL REQUIRED)
 
+if (NOT DEFINED OFFLINEMOD_IP)
+    set(OFFLINEMOD_IP "127.0.0.1")
+endif()
+
+if (NOT DEFINED OFFLINEMOD_PORT)
+    set(OFFLINEMOD_PORT 9960)
+endif()
+
+if (NOT DEFINED OFFLINEMOD_DISABLE_HTTPS)
+    set(OFFLINEMOD_DISABLE_HTTPS 1)
+endif()
+
 add_subdirectory(detours)
 add_subdirectory(OfflineMod.win32)

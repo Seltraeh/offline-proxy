@@ -48,14 +48,22 @@ Follow these steps to clone, configure, and build the offline proxy. This will g
 ### Build Presets
 CMake presets allow you to configure the build for different purposes and compilers. Choose the preset that matches your needs:
 
-| Preset Name     | Description                                                                 |
-|-----------------|-------------------------------------------------------------------------|
+| Preset Name     | Description                                                                      |
+|-----------------|----------------------------------------------------------------------------------|
 | `deploy-vs`     | Configuration for deploying to the BF client using Visual Studio as the compiler |
-| `deploy-mingw`  | Configuration for deploying to the BF client using MinGW as the compiler      |
-| `debug-vs`      | Configuration for testing the BF client with a local server using Visual Studio |
-| `debug-mingw`   | Configuration for testing the BF client with a local server using MinGW       |
+| `deploy-mingw`  | Configuration for deploying to the BF client using MinGW as the compiler         |
+| `debug-vs`      | Configuration for testing the BF client with a local server using Visual Studio  |
+| `debug-mingw`   | Configuration for testing the BF client with a local server using MinGW          |
 
 - **Note**: The `debug-vs` preset (used in the example above) is recommended for initial testing and development. Adjust the preset and configuration (`Debug` or `RelWithDebInfo`) based on your deployment or testing needs.
+
+## Extra cmake variables
+You can modify some of the Proxy behaviour by defining the CMake variables defined here:
+| Name                      | Description                                                                              | Default value   |
+| ------------------------- | ---------------------------------------------------------------------------------------- | --------------- |
+| OFFLINEMOD_IP             | Sets the server IP which the proxy would connect                                         | 127.0.0.1       |
+| OFFLINEMOD_PORT           | Sets the server port which the proxy would connect                                       | 9960            |
+| OFFLINEMOD_DISABLE_HTTPS  | Enables the patches that allows the proxy to connect to an insecure (HTTP) connection    | 1 (true)        |
 
 ## Next Steps: Building the Game Client
 Once you’ve successfully built the offline proxy and obtained `libcurl.dll`, refer to the Brave Frontier offline mod documentation for instructions on integrating the proxy with the game client and setting up the local server. This typically involves:

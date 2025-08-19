@@ -6,6 +6,7 @@
 */
 #include "pch.h"
 #include <detours/detours.h>
+#include <serverconfig.h>
 
 typedef HINTERNET(WINAPI* InternetConnectW_t)(
     _In_ HINTERNET     hInternet,
@@ -80,7 +81,7 @@ static HINTERNET WINAPI MyInternetConnectA(
     if (strstr(lpszServerName, "microsoft.com") != nullptr || strstr(lpszServerName, "wikia.com") != nullptr || strstr(lpszServerName, "fandom.com") != nullptr)
         return TrueInternetConnectA(hInternet, lpszServerName, INTERNET_DEFAULT_HTTP_PORT, lpszUserName, lpszPassword, dwService, dwFlags, dwContext);
 
-    return TrueInternetConnectA(hInternet, "127.0.0.1", 9960, lpszUserName, lpszPassword, dwService, dwFlags, dwContext);
+    return TrueInternetConnectA(hInternet, SERVICE_IP, SERVICE_PORT, lpszUserName, lpszPassword, dwService, dwFlags, dwContext);
 }
 
 static HINTERNET WINAPI MyInternetConnectW(
@@ -101,7 +102,7 @@ static HINTERNET WINAPI MyInternetConnectW(
     if (wcswcs(lpszServerName, L"microsoft.com") != nullptr || wcswcs(lpszServerName, L"wikia.com") != nullptr || wcswcs(lpszServerName, L"fandom.com") != nullptr)
         return TrueInternetConnectW(hInternet, lpszServerName, INTERNET_DEFAULT_HTTP_PORT, lpszUserName, lpszPassword, dwService, dwFlags, dwContext);
 
-    return TrueInternetConnectW(hInternet, L"127.0.0.1", 9960, lpszUserName, lpszPassword, dwService, dwFlags, dwContext);
+    return TrueInternetConnectW(hInternet, SERVICE_IP_W, SERVICE_PORT, lpszUserName, lpszPassword, dwService, dwFlags, dwContext);
 }
 
 static void PatchSecurityOptions(HINTERNET hInternet)
@@ -111,7 +112,9 @@ static void PatchSecurityOptions(HINTERNET hInternet)
 
     if (InternetQueryOption(hInternet, INTERNET_OPTION_SECURITY_FLAGS, &dwFlags2, &dwBuffLen))
     {
+#ifndef OFFLINE_DEPLOY
         printf("patched options...\n");
+#endif
         dwFlags2 |= SECURITY_SET_MASK;
         InternetSetOption(hInternet, INTERNET_OPTION_SECURITY_FLAGS, &dwFlags2, sizeof(dwFlags2));
     }
@@ -139,6 +142,7 @@ static HINTERNET WINAPI MyHttpOpenRequestA(
     return ret;
 }
 
+#if SERVICE_DISABLE_HTTPS
 HINTERNET WINAPI MyHttpOpenRequestW(
     _In_ HINTERNET hConnect,
     _In_ LPCWSTR   lpszVerb,
@@ -160,6 +164,7 @@ HINTERNET WINAPI MyHttpOpenRequestW(
     PatchSecurityOptions(ret);
     return ret;
 }
+#endif
 
 static void DetourDetach()
 {
@@ -167,8 +172,10 @@ static void DetourDetach()
     DetourUpdateThread(GetCurrentThread());
     DetourDetach(&(PVOID&)TrueInternetConnectA, (PVOID)MyInternetConnectA);
     DetourDetach(&(PVOID&)TrueInternetConnectW, (PVOID)MyInternetConnectW);
+#if SERVICE_DISABLE_HTTPS
     DetourDetach(&(PVOID&)TrueHttpOpenRequestA, (PVOID)MyHttpOpenRequestA);
     DetourDetach(&(PVOID&)TrueHttpOpenRequestW, (PVOID)MyHttpOpenRequestW);
+#endif
     DetourTransactionCommit();
 }
 
@@ -178,8 +185,10 @@ static void DetourAttach()
     DetourUpdateThread(GetCurrentThread());
     DetourAttach(&(PVOID&)TrueInternetConnectA, (PVOID)MyInternetConnectA);
     DetourAttach(&(PVOID&)TrueInternetConnectW, (PVOID)MyInternetConnectW);
+#if SERVICE_DISABLE_HTTPS
     DetourAttach(&(PVOID&)TrueHttpOpenRequestA, (PVOID)MyHttpOpenRequestA);
     DetourAttach(&(PVOID&)TrueHttpOpenRequestW, (PVOID)MyHttpOpenRequestW);
+#endif
     DetourTransactionCommit();
 }
 
