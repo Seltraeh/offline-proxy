@@ -1,0 +1,352 @@
+{
+ "modules": [
+  {
+   "file": "BraveFrontier.Windows.exe",
+   "sha256": "fb4f3c25f02944ca9e0f80fe5555998f0d6fae5e9901e4cf09795be90c8e3c49",
+   "size": 24280064,
+   "timeDateStamp": 1649670183,
+   "sizeOfImage": 24469504,
+   "entryPoint": 15542077
+  },
+  {
+   "file": "libcocos2d_v2.2.5_Windows_8.1.dll",
+   "sha256": "5488d108e45a776a9cc8fd4c3ab3f4504a67dbc6d5fa2749d4af9ba6f1066a42",
+   "size": 3775488,
+   "timeDateStamp": 1649053957,
+   "sizeOfImage": 3792896,
+   "entryPoint": 2337758
+  }
+ ],
+ "sites": [
+  {
+   "name": "getFileData",
+   "module": 1,
+   "rva": 1269424,
+   "bytes": "558BEC83E4F86AFF68A064241064A1000000005083EC40A12C44351033C48944",
+   "mask": "xxxxxxxxx????xxxxxxxxxxx????xxxx"
+  },
+  {
+   "name": "isFileExist",
+   "module": 1,
+   "rva": 1318736,
+   "bytes": "558BEC83E4F86AFF6838D5231064A1000000005083EC28A12C44351033C48944",
+   "mask": "xxxxxxxxx????xxxxxxxxxxx????xxxx"
+  },
+  {
+   "name": "getWritablePath",
+   "module": 1,
+   "rva": 1318336,
+   "bytes": "558BEC83E4F86AFF68DF7C241064A1000000005083EC48A1",
+   "mask": "xxxxxxxxx????xxxxxxxxxxx"
+  },
+  {
+   "name": "replaceScene",
+   "module": 1,
+   "rva": 1034400,
+   "bytes": "558BEC51538BD956578B7D088B8B9400",
+   "mask": "xxxxxxxxxxxxxxxx"
+  },
+  {
+   "name": "pushScene",
+   "module": 1,
+   "rva": 1034592,
+   "bytes": "558BEC56578BF9BA010000008B879400",
+   "mask": "xxxxxxxxxxxxxxxx"
+  },
+  {
+   "name": "popScene",
+   "module": 1,
+   "rva": 1034672,
+   "bytes": "53568BF1578B86940000008B78148B1F",
+   "mask": "xxxxxxxxxxxxxxxx"
+  },
+  {
+   "name": "runWithScene",
+   "module": 1,
+   "rva": 1034320,
+   "bytes": "558BEC56578BF9BA010000008B879400",
+   "mask": "xxxxxxxxxxxxxxxx"
+  },
+  {
+   "name": "drawScene",
+   "module": 1,
+   "rva": 1031024,
+   "bytes": "558BEC83E4F06AFF688954241064A100",
+   "mask": "xxxxxxxxx????xxx"
+  },
+  {
+   "name": "existsLocalFile",
+   "module": 0,
+   "rva": 2326192,
+   "bytes": "558BEC83E4F86AFF6848042F0164A1000000005083EC5CA14C02840133C4894424545356A14C02840133C4508D442468",
+   "mask": "xxxxxxxxx????xxxxxxxxxxx????xxxxxxxxx????xxxxxxx"
+  },
+  {
+   "name": "isFileAlreadyDownloaded",
+   "module": 0,
+   "rva": 14948320,
+   "bytes": "558BEC51568B35207E9901578BF985F6744B578D45FC508D4E14E8F1EB29FF8B003B4614740E8378",
+   "mask": "xxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  },
+  {
+   "name": "getTexture",
+   "module": 0,
+   "rva": 2315216,
+   "bytes": "558BEC6AFF68C0FF2E0164A1000000005083EC50A14C02840133C58945F0535657508D45F464A3000000008855EB8BD9",
+   "mask": "xxxxxx????xxxxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxx"
+  },
+  {
+   "name": "getTexture_readsite",
+   "module": 0,
+   "rva": 2315473,
+   "bytes": "FFD78BF08BCB8D45EC506854A468018B3EE8198FEAFF508BCEFF5730807DEB00",
+   "mask": "xxxxxxxxxxx????xxxxxxxxxxxxxxxxx"
+  },
+  {
+   "name": "pairTexture_read1",
+   "module": 0,
+   "rva": 6683945,
+   "bytes": "FF1540A360018B4D908BF08D45D0506854A468018B3EE8BCE6A7FF508BCEFF5730833D8C",
+   "mask": "xx????xxxxxxxxxx????xxxxxxxxxxxxxxx?"
+  },
+  {
+   "name": "pairTexture_read2",
+   "module": 0,
+   "rva": 6684118,
+   "bytes": "FF1540A360018B4D8C8BF08D45CC506854A468018B3EE80FE6A7FF508BCEFF5730833D8C",
+   "mask": "xx????xxxxxxxxxx????xxxxxxxxxxxxxxx?"
+  },
+  {
+   "name": "downloadWrite",
+   "module": 0,
+   "rva": 2240656,
+   "bytes": "558BEC6AFF68E0E62E0164A1000000005083EC1CA14C02840133C58945F05356",
+   "mask": "xxxxxx????xxxxxxxxxxx????xxxxxxx"
+  },
+  {
+   "name": "addLoadFile",
+   "module": 0,
+   "rva": 6508448,
+   "bytes": "558BEC6AFF68D472330164A1000000005083EC70A14C02840133C58945EC535657508D45F464A300000000894DBC6A1D",
+   "mask": "xxxxxx????xxxxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxx"
+  },
+  {
+   "name": "addLoadFilePriority",
+   "module": 0,
+   "rva": 1067424,
+   "bytes": "558BEC6AFF68DF842D0164A1000000005081ECB4000000A14C02840133C58945F0535657508D45F464A3000000008BD9",
+   "mask": "xxxxxx????xxxxxxxxxxxxxx????xxxxxxxxxxxxxxxxxxxx"
+  },
+  {
+   "name": "audioReader",
+   "module": 0,
+   "rva": 15466544,
+   "bytes": "558BEC83E4F86AFF68D0AF3D0164A1000000005081EC88000000A14C02840133C489842480000000535657A14C028401",
+   "mask": "xxxxxxxxx????xxxxxxxxxxxxxx????xxxxxxxxxxxxx????"
+  },
+  {
+   "name": "audioReaderOpen",
+   "module": 0,
+   "rva": 15466929,
+   "bytes": "837C2464108D4424506854A468010F43442454508D44245450FF1548B0600183C40C85C0740732DBE9B6010000FF74244C8DB72840000068D20000006A0156FF1534B0600183C41089472085C00F8EA9000000",
+   "mask": "xxxxxxxxxx????xxxxxxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxxxxxxxxxxxxx"
+  }
+ ],
+ "gate_flash_sites": [
+  {
+   "name": "summonsUpdateEvent",
+   "module": 0,
+   "rva": 8871712,
+   "bytes": "558BEC83E4F86AFF68ED41360164A1000000005083EC40535657A14C02840133C4508D44245064A3000000008BF9C744",
+   "mask": "xxxxxxxxx????xxxxxxxxxxxxxx????xxxxxxxxxxxxxxxxx"
+  },
+  {
+   "name": "gateFlashTrigger",
+   "module": 0,
+   "rva": 8872175,
+   "bytes": "E89CB2DBFF8B40148B48182B4814C1F90283F9030F852F01000083BF38020000000F85220100006A02E873B2DBFF8BC8E85CBDDBFF8BF08D442434508BCEE83E65BEFF6A00C744245C03000000BB0100000068C4936A018BC8895C2420E89FAE87FF83F8FF75298D44241C8BCE50E80E65BEFF6A0068903F6B018BC8BB03000000E87BAE87FFC64424170083F8FF7405C644241701F6C302740C8D4C241C83E3FDE88B7D86FFC7442458FFFFFFFFF6C30174098D4C2434E8757D86FF807C2417000F85C5000000F30F2C86B001000083F82D7C75518BCC66C744241CFFFF668B44241C80CAFF68E8030000668901885102E89B88DCFF83EC08660F6EC00F5BC0F30F11442404E896009CFF660F6EC00F5BC0F30F11442428E8E43ADCFFF30F105C242833D283C4040F28D00F57C98D4A05E81B164F0083C40C898738020000C78734020000000000008B9F3802000085DB7439698F34020000FF000000B889888888F7E9B8FF00000003D18D8BE4000000C1FA048BF2C1EE1F03F23BF00F4FF08B0156FF5014FF87340200008B4C245064890D00000000595F5E5B8BE55DC3",
+   "mask": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  },
+  {
+   "name": "superAnimListShared",
+   "module": 0,
+   "rva": 6493072,
+   "bytes": "558BEC6AFF68BC602D0164A1000000005051A14C02840133C5508D45F464A300000000A1807B990185C075476A18FF15",
+   "mask": "xxxxxx????xxxxxxxxx????xxxxxxxxxxxxx????xxxxxxxx"
+  }
+ ],
+ "post_quest_sites": [
+  {
+   "name": "resultRatingBranch",
+   "module": 0,
+   "rva": 10640591,
+   "bytes": "83BEDC000000007405E823A74200E8DE9DBEFF",
+   "mask": "xxxxxxxxxxxxxxxxxxx"
+  },
+  {
+   "name": "friendFacebookBranch",
+   "module": 0,
+   "rva": 10615079,
+   "bytes": "E8443DDFFF84C0745AE82B734000E8868B400083F8027E4B80BF3F02000000754280A7F4000000FB68D4AA6C0151E8D6C2350083C4048BC8E84C3397FF68F0AA6C01518BF0E8BFC2350083C4048BC8E8353397FF6A0056506A018BCFE878E1DCFFEB128BCFE83FD1FFFFFF7424208BCFE8345FDDFF",
+   "mask": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxxxxxxxxxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  }
+ ],
+ "startup_sites": [
+  {
+   "name": "census",
+   "module": 0,
+   "rva": 14947792,
+   "bytes": "558BEC6AFF68392D3D0164A1000000005083EC40A14C02840133C58945F05657508D45F464A3000000008B3DC4AE6001",
+   "mask": "xxxxxx????xxxxxxxxxxx????xxxxxxxxxxxxxxxxxxx????"
+  },
+  {
+   "name": "censusCallStartup",
+   "module": 0,
+   "rva": 14952408,
+   "bytes": "A1207E990185C0750EE8EAEDFFFFA1207E990185C0747B837818007675",
+   "mask": "x????xxxxxxxxxx????xxxxxxxxxx"
+  },
+  {
+   "name": "censusCallLogin",
+   "module": 0,
+   "rva": 9319108,
+   "bytes": "833D207E9901008B87180200008944241CC7442424000000007505E8ECE25500",
+   "mask": "xx????xxxxxxxxxxxxxxxxxxxxxxxxxx"
+  },
+  {
+   "name": "censusCallMission",
+   "module": 0,
+   "rva": 10501272,
+   "bytes": "833D207E9901007505E82AD94300",
+   "mask": "xx????xxxxxxxx"
+  },
+  {
+   "name": "censusLookup",
+   "module": 0,
+   "rva": 14948320,
+   "bytes": "558BEC51568B35207E9901578BF985F6744B",
+   "mask": "xxxxxxx????xxxxxxx"
+  },
+  {
+   "name": "censusExistsFallback",
+   "module": 0,
+   "rva": 2326261,
+   "bytes": "833D207E990100740AE8DD98C000E9860000008D4C2414E8EF7A42006AFF6A00568D4C2420C744247C00000000E8795DEBFF837C2428108D4C242C8D4424140F434424145150FF15E8AF6001",
+   "mask": "xx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????"
+  },
+  {
+   "name": "promptFlagRead",
+   "module": 0,
+   "rva": 9327001,
+   "bytes": "83EC188BCC6834976801E8188D7FFFE853B195FF83C41885C07444B97D9868018DA424000000008A103A11751A84D274128A50013A5101750E83C00283C10284D275E433C0EB051BC083C80185C0740FC787140200000A000000E91B010000",
+   "mask": "xxxxxx????xxxxxxxxxxxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  },
+  {
+   "name": "loadUserDefaults",
+   "module": 0,
+   "rva": 2360064,
+   "bytes": "558BEC6AFF683E132F0164A1000000005083EC6CA14C02840133C58945EC535657508D45F464A3000000008965F08D4508C745FC0000000050BA9CA769018D4D88E84A87ECFF",
+   "mask": "xxxxxx????xxxxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxxxxxxx"
+  },
+  {
+   "name": "loadUserDefaultsExit",
+   "module": 0,
+   "rva": 2360738,
+   "bytes": "7208FF7508FFD783C4048BC6EB33837DE8107208FF75D4FFD783C404837D1C10C745E80F000000C745E400000000C645D4007208FF7508FFD783C404B87D9868018B4DF464890D00000000595F5E5B8B4DEC33CDE83C1AC9008BE55DC3",
+   "mask": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  }
+ ],
+ "name_fit_sites": [
+  {
+   "name": "unitTitleNameCall",
+   "module": 0,
+   "rva": 13267340,
+   "bytes": "6A0C518BC451668930885002BA07000000F30F1104248D4A33E856FF6DFF83C424",
+   "mask": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  },
+  {
+   "name": "labelCreateFull",
+   "module": 0,
+   "rva": 3699872,
+   "bytes": "558BEC6AFF68F87B300164A1000000005083EC30535657A14C02840133C5508D45F464A3000000008955ECF30F115DF0F30F1155E8F30F114DE0894DD88B450CF30F1045088B5D0E8B7D108B75148945D48B45188945D08845E48B451CF30F1145DC8845CC83EC18C745FC000000008BCC8D45246AFF6A00C741140F000000C741100000000050C60100E8216DD5FFFF75CCF30F1045DCFF75E48B55ECF30F105DF0F30F1055E8F30F104DE05657518B4DD48BC4516689088B4DD8885802F30F110424E8B8089E008BF083C430807DD0008A45208886E4000000751084C0740CF30F104DF08BCEE824FBEAFF",
+   "mask": "xxxxxx????xxxxxxxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  },
+  {
+   "name": "labelShrinkToFit",
+   "module": 0,
+   "rva": 2322608,
+   "bytes": "558BEC83EC1CA14C02840133C58945FC568BF1F30F114DEC8B8E000100008B41182B4114C1F80285C00F84920000008B41182B4114C1F80285C0750433C9EB058B41148B088B01FF9088000000508D4DF4FF1534A56001518BCEE8A16115008B8E00010000660F6EC08B41182B41140F5BC0C1F802F30F1145F085C0750433C9EB058B41148B088B018B4044FFD0F30F105DF0F30F1055ECD95DE8F30F104DE80F28C1F30F59C30F2FC27615F30F59CA8B06518BCEF30F5ECBF30F110C24FF50408B4DFC33CD5EE8BBAEC900",
+   "mask": "xxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  },
+  {
+   "name": "popupDescWidthBB",
+   "module": 0,
+   "rva": 13342861,
+   "bytes": "F30F101DB0566E01",
+   "mask": "xxxx????"
+  },
+  {
+   "name": "popupDescWidthEx",
+   "module": 0,
+   "rva": 13343008,
+   "bytes": "F30F101DB0566E01",
+   "mask": "xxxx????"
+  },
+  {
+   "name": "popupDescWidthUl",
+   "module": 0,
+   "rva": 13343105,
+   "bytes": "F30F101DB0566E01",
+   "mask": "xxxx????"
+  },
+  {
+   "name": "popupDescCallBB",
+   "module": 0,
+   "rva": 13342919,
+   "bytes": "E834D86CFF83C42489",
+   "mask": "xxxxxxxxx"
+  },
+  {
+   "name": "popupDescCallEx",
+   "module": 0,
+   "rva": 13343038,
+   "bytes": "E8BDD76CFF83C4248B",
+   "mask": "xxxxxxxxx"
+  },
+  {
+   "name": "popupDescCallUl",
+   "module": 0,
+   "rva": 13343159,
+   "bytes": "E844D76CFF8B9DF8FC",
+   "mask": "xxxxxxxxx"
+  },
+  {
+   "name": "labelSetText",
+   "module": 0,
+   "rva": 3720112,
+   "bytes": "558BEC6AFF689384300164A1000000005083EC7CA14C02840133C58945EC5657508D45F464A3000000008BF9897DC8C745FC000000008D450C837D20108DB74C010000FF751C0F43450C8BCE50FF76106A00E8B94BD5FF85C075093845080F845E0500008D450C3BF0740C6AFF6A00508BCEE8291ED5FF",
+   "mask": "xxxxxx????xxxxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  },
+  {
+   "name": "labelSetTextWidth",
+   "module": 0,
+   "rva": 3721004,
+   "bytes": "F30F108714010000F30F114650F30F108718010000F30F114654",
+   "mask": "xxxxxxxxxxxxxxxxxxxxxxxxxx"
+  },
+  {
+   "name": "labelLayout",
+   "module": 0,
+   "rva": 3722688,
+   "bytes": "558BEC83E4F883EC30A14C02840133C48944242CF30F10450856578BF9F30F11442414F30F10450CF30F114424100F57C0897C24208B07F30F114424088B4030FFD08B078BCFD95C24188B4038FFD08B8F00010000D95C241C8B41182B4114C1F80285C00F84D7010000",
+   "mask": "xxxxxxxxxx????xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  },
+  {
+   "name": "stringAssign",
+   "module": 0,
+   "rva": 909904,
+   "bytes": "558BEC538B5D0856578BF18B4D0C8B7B103BF9730B68E0966801FF15F8AC60012BF9397D100F427D",
+   "mask": "xxxxxxxxxxxxxxxxxxxxxx????xx????xxxxxxxx"
+  }
+ ]
+}

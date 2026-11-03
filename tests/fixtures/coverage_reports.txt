@@ -1,0 +1,945 @@
+# Coverage reports (/offline_mod/content/v1/coverage, "coverage 1") that every reader must judge
+# alike: the DLL's ParseCoverage (tests/test_main.cpp TestCoverageCorpus) and the acceptance
+# harness's coverage command (BF-WorkingDirRust/scripts/content_provider_client_test.py, tested by
+# test_content_harness_startup.py).  A reader may only call a report complete when everything it
+# states proves it; a bare "complete 1" is never enough (Session 16 QC, 2026-10-20).
+#
+#   == <case name>
+#   expect complete | incomplete | unreadable      (unreadable: not a report at all)
+#   build <the client build the reader asked for>
+#   <<<
+#   <report lines>
+#   >>>
+#
+# The body between <<< and >>> is joined with "\n" and ends with one "\n".
+
+== a complete, consistent report
+expect complete
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 3
+inputs 1
+I	localstate	Ver3275_hdt2N6mr_1.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 1
+end
+>>>
+
+== QC: a bare complete claim with no sets and no header
+expect unreadable
+build B1
+<<<
+bfcp 2
+coverage 1
+complete 1
+generation 1
+end
+>>>
+
+== an incomplete report with its problem rows and reason
+expect incomplete
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 3
+inputs 1
+I	localstate	Ver3275_hdt2N6mr_1.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 3 absent 0 unowned 1 missing 0 ambiguous 0 unavailable 0
+complete 0
+reason set login: 1 unowned
+P	login	unowned	a.png
+end
+>>>
+
+== claims complete with only the login set
+expect incomplete
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 3
+inputs 1
+I	localstate	Ver3275_hdt2N6mr_1.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 1
+end
+>>>
+
+== claims complete with two empty sets
+expect incomplete
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 0
+inputs 1
+I	localstate	Ver3275_hdt2N6mr_1.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set background required 0 ok 0 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 0 ok 0 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 1
+end
+>>>
+
+== claims complete while names are absent from every source
+expect incomplete
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 3
+inputs 1
+I	localstate	Ver3275_hdt2N6mr_1.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 2 absent 2 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 1
+end
+>>>
+
+== the first Session 16 broker: accepted absent names as A rows
+expect unreadable
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 3
+inputs 1
+I	localstate	Ver3275_hdt2N6mr_1.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 3 absent 1 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 1
+A	login	gone.png
+end
+>>>
+
+== claims complete with a problem row
+expect incomplete
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 3
+inputs 1
+I	localstate	Ver3275_hdt2N6mr_1.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set background required 5 ok 4 absent 0 unowned 0 missing 1 ambiguous 0 unavailable 0
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 1
+P	background	missing	b.png
+end
+>>>
+
+== claims complete and gives a reason
+expect incomplete
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 3
+inputs 1
+I	localstate	Ver3275_hdt2N6mr_1.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 1
+reason something is wrong
+end
+>>>
+
+== claims complete with an unknown startup list
+expect incomplete
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 1
+excluded 3
+inputs 1
+I	localstate	Ver3275_hdt2N6mr_1.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 1
+U	category item: names enumerated from existing files
+end
+>>>
+
+== the unknown count and its rows disagree
+expect incomplete
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 2
+excluded 3
+inputs 1
+I	localstate	Ver3275_hdt2N6mr_1.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 0
+reason 2 startup list(s) the manifest could not derive
+U	category item: names enumerated from existing files
+end
+>>>
+
+== claims complete but its counts do not add up
+expect incomplete
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 3
+inputs 1
+I	localstate	Ver3275_hdt2N6mr_1.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set background required 6 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 1
+end
+>>>
+
+== problem rows exceed the count they belong to
+expect incomplete
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 3
+inputs 1
+I	localstate	Ver3275_hdt2N6mr_1.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 3 absent 0 unowned 1 missing 0 ambiguous 0 unavailable 0
+complete 0
+reason set login: 1 unowned
+P	login	unowned	a.png
+P	login	unowned	b.png
+end
+>>>
+
+== a field twice
+expect unreadable
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 3
+inputs 1
+I	localstate	Ver3275_hdt2N6mr_1.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 0
+complete 1
+end
+>>>
+
+== a set line twice
+expect unreadable
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 3
+inputs 1
+I	localstate	Ver3275_hdt2N6mr_1.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 1
+end
+>>>
+
+== an unknown field
+expect unreadable
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 3
+inputs 1
+I	localstate	Ver3275_hdt2N6mr_1.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+trust_me 1
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 1
+end
+>>>
+
+== a set line without all its counts
+expect unreadable
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 3
+inputs 1
+I	localstate	Ver3275_hdt2N6mr_1.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 1
+end
+>>>
+
+== claims complete without a loaded manifest
+expect incomplete
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest none
+manifest_error startup manifest lacks the required non-empty set background
+manifest_build none
+client_build B1
+build_match 0
+unknown 0
+excluded 0
+inputs 1
+I	localstate	Ver3275_hdt2N6mr_1.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+complete 1
+end
+>>>
+
+== claims complete without a policy digest
+expect incomplete
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy none
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 3
+inputs 1
+I	localstate	Ver3275_hdt2N6mr_1.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 1
+end
+>>>
+
+== claims complete with a third set
+expect incomplete
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 3
+inputs 1
+I	localstate	Ver3275_hdt2N6mr_1.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set extra required 1 ok 1 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 1
+end
+>>>
+
+== claims complete for another client build
+expect incomplete
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B2
+client_build B2
+build_match 1
+unknown 0
+excluded 3
+inputs 1
+I	localstate	Ver3275_hdt2N6mr_1.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 1
+end
+>>>
+
+== claims complete with build_match 0
+expect incomplete
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 0
+unknown 0
+excluded 3
+inputs 1
+I	localstate	Ver3275_hdt2N6mr_1.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 1
+end
+>>>
+
+== claims complete from a broker that is not ready
+expect incomplete
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 0
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 3
+inputs 1
+I	localstate	Ver3275_hdt2N6mr_1.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 1
+end
+>>>
+
+== a truncated report (no end line)
+expect unreadable
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 3
+inputs 1
+I	localstate	Ver3275_hdt2N6mr_1.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 1
+>>>
+
+== an older protocol
+expect unreadable
+build B1
+<<<
+bfcp 1
+coverage 1
+complete 1
+end
+>>>
+
+== a header field missing (no excluded line)
+expect unreadable
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 1
+end
+>>>
+
+== a generation that is not a number
+expect unreadable
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation seven
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 3
+inputs 1
+I	localstate	Ver3275_hdt2N6mr_1.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 1
+end
+>>>
+
+== a malformed problem row
+expect unreadable
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 3
+inputs 1
+I	localstate	Ver3275_hdt2N6mr_1.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 3 absent 0 unowned 1 missing 0 ambiguous 0 unavailable 0
+complete 0
+reason set login: 1 unowned
+P	login	strange	a.png
+end
+>>>
+
+== an incomplete report without a reason line
+expect incomplete
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 3
+inputs 1
+I	localstate	Ver3275_hdt2N6mr_1.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 0
+end
+>>>
+
+== Session 18: complete, naming a LocalState table and a package file
+expect complete
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 3
+inputs 2
+I	localstate	Ver3275_hdt2N6mr_1.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+I	package	Assets/Resources/resourceMap	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 1
+end
+>>>
+
+== Session 18: claims complete without naming a client file
+expect incomplete
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 3
+inputs 0
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 1
+end
+>>>
+
+== Session 18: the inputs count and its rows disagree
+expect incomplete
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 3
+inputs 2
+I	localstate	Ver3275_hdt2N6mr_1.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 1
+end
+>>>
+
+== Session 18: a broker before the inputs field (Session 17)
+expect unreadable
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 3
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 1
+end
+>>>
+
+== Session 18: an input row escaping its root
+expect unreadable
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 3
+inputs 1
+I	package	Assets/../../x.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 1
+end
+>>>
+
+== Session 18: an input row with an unknown root
+expect unreadable
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 3
+inputs 1
+I	system	x.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 1
+end
+>>>
+
+== Session 18: an input row with a short digest
+expect unreadable
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 3
+inputs 1
+I	localstate	x.dat	sha256:abcd
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 1
+end
+>>>
+
+== Session 18: a LocalState input in a folder
+expect unreadable
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 3
+inputs 1
+I	localstate	a/x.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 1
+end
+>>>
+
+== Session 18: an input named twice (case-insensitively)
+expect unreadable
+build B1
+<<<
+bfcp 2
+coverage 1
+enabled 1
+ready 1
+epoch e1
+generation 7
+policy sha256:aaaa
+manifest sha256:bbbb
+manifest_build B1
+client_build B1
+build_match 1
+unknown 0
+excluded 3
+inputs 2
+I	localstate	Ver3275_hdt2N6mr_1.dat	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+I	localstate	VER3275_HDT2N6MR_1.DAT	sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+set background required 5 ok 5 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+set login required 4 ok 4 absent 0 unowned 0 missing 0 ambiguous 0 unavailable 0
+complete 1
+end
+>>>

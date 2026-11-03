@@ -454,3 +454,6 @@ CTestTestfile.cmake
 _deps
 CMakeUserPresets.json
 build.ninja
+
+# CMake build tree (README: "mkdir build")
+/build/

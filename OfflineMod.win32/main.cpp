@@ -8,6 +8,12 @@
 #include <detours/detours.h>
 #include <serverconfig.h>
 #include "fps_cap.h"
+#include "console_log.h"
+#include "content/cp_gate_flash.h"
+#include "content/cp_name_fit.h"
+#include "content/cp_post_quest.h"
+#include "content/cp_hooks.h"
+#include "content/cp_startup.h"
 
 typedef HINTERNET(WINAPI* InternetConnectW_t)(
     _In_ HINTERNET     hInternet,
@@ -76,7 +82,7 @@ static HINTERNET WINAPI MyInternetConnectA(
 )
 {
 #ifndef OFFLINE_DEPLOY
-    printf("InternetConnectA: %s:%u (SVC:%x)\n", lpszServerName, nServerPort, dwService);
+    ConsoleLog("InternetConnectA: %s:%u (SVC:%x)\n", lpszServerName, nServerPort, dwService);
 #endif
 
     if (strstr(lpszServerName, "microsoft.com") != nullptr || strstr(lpszServerName, "wikia.com") != nullptr || strstr(lpszServerName, "fandom.com") != nullptr)
@@ -97,7 +103,7 @@ static HINTERNET WINAPI MyInternetConnectW(
 )
 {
 #ifndef OFFLINE_DEPLOY
-    wprintf(L"InternetConnectW: %s:%u (SVC:%x)\n", lpszServerName, nServerPort, dwService);
+    ConsoleLogW(L"InternetConnectW: %s:%u (SVC:%x)\n", lpszServerName, nServerPort, dwService);
 #endif
 
     if (wcswcs(lpszServerName, L"microsoft.com") != nullptr || wcswcs(lpszServerName, L"wikia.com") != nullptr || wcswcs(lpszServerName, L"fandom.com") != nullptr)
@@ -114,7 +120,7 @@ static void PatchSecurityOptions(HINTERNET hInternet)
     if (InternetQueryOption(hInternet, INTERNET_OPTION_SECURITY_FLAGS, &dwFlags2, &dwBuffLen))
     {
 #ifndef OFFLINE_DEPLOY
-        printf("patched options...\n");
+        ConsoleLog("patched options...\n");
 #endif
         dwFlags2 |= SECURITY_SET_MASK;
         InternetSetOption(hInternet, INTERNET_OPTION_SECURITY_FLAGS, &dwFlags2, sizeof(dwFlags2));
@@ -169,6 +175,13 @@ HINTERNET WINAPI MyHttpOpenRequestW(
 
 static void DetourDetach()
 {
+    // Its own transaction, like its attach (see DetourAttach below).
+    Startup_Detach();
+    ContentProvider_Detach();
+    GateFlash_Detach();
+    NameFit_Detach();
+    PostQuest_Detach();
+
     DetourTransactionBegin();
     DetourUpdateThread(GetCurrentThread());
     DetourDetach(&(PVOID&)TrueInternetConnectA, (PVOID)MyInternetConnectA);
@@ -193,6 +206,29 @@ static void DetourAttach()
 #endif
     FpsCap_Attach();
     DetourTransactionCommit();
+
+    // Startup work replaced on the strength of the broker's coverage report: its
+    // sites are checked here, on the untouched image, because the content provider
+    // below detours one of them (the downloaded-name lookup).
+    Startup_Prepare();
+
+    // Separate transaction: Detours aborts a whole transaction when one attach
+    // fails, and the content provider must never take the connection hooks or
+    // the FPS cap down with it.  It verifies the client build first and
+    // declines (logging why) on anything it does not recognise.
+    ContentProvider_Attach();
+
+    // The startup edits need the provider above: they go in only if every site
+    // still holds the bytes Startup_Prepare saw, except exactly the provider's own
+    // recorded detour, and decline on their own (logging why) otherwise.
+    Startup_Attach();
+
+    // The summon gate white-screen fix (#24): one verified code patch of its
+    // own, independent of the provider's hooks and of its broker.
+    GateFlash_Attach();
+    // The unit info title name fit (#22-2): one verified call retarget of its own.
+    NameFit_Attach();
+    PostQuest_Attach();
 }
 
 BOOL WINAPI DllMain(
@@ -216,6 +252,8 @@ BOOL WINAPI DllMain(
     else if (fdwReason == DLL_PROCESS_ATTACH)
     {
 #ifndef OFFLINE_DEPLOY
+        // Hooks print through console_log.h, never straight to this console: a
+        // console that is selecting text or paused blocks every write to it.
         if (!AllocConsole())
         {
             MessageBoxA(nullptr, "ALLOC_CONSOLE_FAILED", "DEBUG", MB_OK | MB_ICONERROR);

@@ -58,5 +58,21 @@ if (NOT DEFINED OFFLINEMOD_FPS_CAP_DIAG)
     set(OFFLINEMOD_FPS_CAP_DIAG 0)
 endif()
 
+# Authoritative content provider (docs/CONTENT_PROVIDER_WINDOWS_CONTRACT.md):
+# reads selected assets from the server's game_content broker into RAM instead
+# of the client's LocalState cache.  Off by default: a normal build contains no
+# provider code.  Even when compiled in it stays dormant unless the client is
+# the exact supported build AND the server's deploy/system/content_provider.json
+# says "enabled": true.
+if (NOT DEFINED OFFLINEMOD_CONTENT_PROVIDER)
+    set(OFFLINEMOD_CONTENT_PROVIDER 0)
+endif()
+
+option(OFFLINEMOD_BUILD_TESTS "Build the content provider unit tests (tests/)" ON)
+
 add_subdirectory(detours)
 add_subdirectory(OfflineMod.win32)
+if (OFFLINEMOD_BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif()

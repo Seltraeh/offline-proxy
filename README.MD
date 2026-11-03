@@ -80,6 +80,37 @@ To change the cap without rebuilding the DLL, edit `fps_cap` in the server's
 `deploy/config.json` (under `plugins[0].config.server`) and relaunch the game.
 The probe runs once per game launch; mid-game changes require a restart.
 
+## Authoritative content provider (optional, off by default)
+
+`-DOFFLINEMOD_CONTENT_PROVIDER=1` compiles a provider that reads selected assets
+from the offline server's `game_content` into RAM instead of the client's
+LocalState cache, so an edited server file (even a same-size edit) is used at
+the next scene change without resetting the app. Nothing is written to disk.
+Within a scene every read is bound to the version that scene started with
+(protocol `bfcp 2`): a file changed on the server mid-scene fails like a
+missing file until the next scene change, instead of mixing versions.
+
+- It only activates when the client is the exact supported build (2.19.6.0 x86:
+  module headers plus masked byte signatures of every hook site) **and** the
+  server's `deploy/system/content_provider.json` says `"enabled": true`.
+  Otherwise the game keeps its own cache and one line explains why.
+- Which files it owns is the server's policy (Phase B: the Town map bundle and
+  unit 60956); see `docs/CONTENT_PROVIDER_WINDOWS_CONTRACT.md` for the recovered
+  loader contract, hook sites, byte forms and limits.
+- Log: `%TEMP%\offlinemod_content.log` inside the app container (the package's
+  `AC\Temp`), plus `OutputDebugString`: every owned read, existence decision,
+  safe point, frame-time/memory window and tripwire.
+- Tests: `build\tests\content_provider_tests.exe` (set `BF_APPX_DIR` to the
+  extracted client so the signature table is checked against the real
+  binaries). They build by default (`OFFLINEMOD_BUILD_TESTS`).
+- For another client build, re-derive the sites in the contract document and
+  regenerate the table with `python tests/fixtures/make_signatures.py <Appx folder>`.
+
+| Variable | Description | Default |
+| --- | --- | --- |
+| OFFLINEMOD_CONTENT_PROVIDER | Compile the authoritative content provider | 0 (off) |
+| OFFLINEMOD_BUILD_TESTS | Build `content_provider_tests` | ON |
+
 ## Next Steps: Building the Game Client
 Once you’ve successfully built the offline proxy and obtained `libcurl.dll`, refer to the Brave Frontier offline mod documentation for instructions on integrating the proxy with the game client and setting up the local server. This typically involves:
 - Copying `libcurl.dll` to the appropriate directory in your Brave Frontier installation.

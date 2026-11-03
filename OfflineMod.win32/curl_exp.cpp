@@ -5,6 +5,7 @@
 * @brief libcurl exports
 */
 #include "pch.h"
+#include "console_log.h"
 #include <curl/curl.h>
 
 extern "C" CURLcode Curl_vsetopt(struct Curl_easy* data, CURLoption option, va_list arg);
@@ -13,33 +14,35 @@ extern "C" CURLcode Curl_getinfo(struct Curl_easy* data, CURLINFO info, ...);
 #ifdef _DEBUG
 static
 void dump(const char* text,
-	FILE* stream, unsigned char* ptr, size_t size)
+	unsigned char* ptr, size_t size)
 {
 	size_t i;
 	size_t c;
 	unsigned int width = 0x10;
 
-	fprintf(stream, "%s, %10.10ld bytes (0x%8.8lx)\n",
+	ConsoleLog("%s, %10.10ld bytes (0x%8.8lx)\n",
 		text, (long)size, (long)size);
 
 	for (i = 0; i < size; i += width) {
-		fprintf(stream, "%4.4lx: ", (long)i);
+		char line[96]; /* offset, 16 hex columns, 16 characters */
+		int n = snprintf(line, sizeof line, "%4.4lx: ", (long)i);
 
 		/* show hex to the left */
 		for (c = 0; c < width; c++) {
 			if (i + c < size)
-				fprintf(stream, "%02x ", ptr[i + c]);
+				n += snprintf(line + n, sizeof line - n, "%02x ", ptr[i + c]);
 			else
-				fputs("   ", stream);
+				n += snprintf(line + n, sizeof line - n, "   ");
 		}
 
 		/* show data on the right */
 		for (c = 0; (c < width) && (i + c < size); c++) {
 			char x = (ptr[i + c] >= 0x20 && ptr[i + c] < 0x80) ? ptr[i + c] : '.';
-			fputc(x, stream);
+			line[n++] = x;
 		}
 
-		fputc('\n', stream); /* newline */
+		line[n] = '\0';
+		ConsoleLog("%s\n", line);
 	}
 }
 
@@ -55,8 +58,7 @@ static int debug_callback(CURL* handle,
 
 	switch (type) {
 	case CURLINFO_TEXT:
-		fputs("== Info: ", stdout);
-		fwrite(data, size, 1, stdout);
+		ConsoleLog("== Info: %.*s", (int)size, data);
 	default: /* in case a new one is introduced to shock us */
 		return 0;
 
@@ -80,7 +82,7 @@ static int debug_callback(CURL* handle,
 		break;
 	}
 
-	dump(text, stdout, (unsigned char*)data, size);
+	dump(text, (unsigned char*)data, size);
 	return 0;
 }
 #endif
@@ -97,7 +99,7 @@ extern "C" CURL* proxy_curl_init()
 	curl_easy_setopt(c, CURLOPT_SSL_VERIFYHOST, q);
 #ifdef _DEBUG
 	curl_easy_setopt(c, CURLOPT_DEBUGFUNCTION, debug_callback);
-	printf("CURL INIT!!!\n");
+	ConsoleLog("CURL INIT!!!\n");
 #endif
 	return c;
 }
@@ -110,7 +112,7 @@ extern "C" CURLcode proxy_curl_setopt(CURL* handle, CURLoption option, ...)
 	long q;
 
 #ifdef _DEBUG
-	printf("CURL SETOPT -> %x\n", option);
+	ConsoleLog("CURL SETOPT -> %x\n", option);
 #endif
 
 	switch (option)
@@ -139,7 +141,7 @@ extern "C" CURLcode proxy_curl_setopt(CURL* handle, CURLoption option, ...)
 		va_list arg2;
 		va_start(arg2, option);
 		char* ip = va_arg(arg2, char*);
-		printf("CURL CONNECT -> %s\n", ip);
+		ConsoleLog("CURL CONNECT -> %s\n", ip);
 		va_end(arg2);
 	}
 #endif
@@ -164,7 +166,7 @@ extern "C" const char* proxy_easy_strerror(CURLcode errornum)
 {
 	const auto& x = curl_easy_strerror(errornum);
 #ifndef OFFLINE_DEPLOY
-	printf("CURL ERROR: %s\n", x);
+	ConsoleLog("CURL ERROR: %s\n", x);
 #endif
 	return x;
 }
