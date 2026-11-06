@@ -8,6 +8,7 @@
 #include <detours/detours.h>
 #include <serverconfig.h>
 #include "fps_cap.h"
+#include "xml_save_dedupe.h"
 #include "console_log.h"
 #include "content/cp_gate_flash.h"
 #include "content/cp_name_fit.h"
@@ -177,6 +178,7 @@ static void DetourDetach()
 {
     // Its own transaction, like its attach (see DetourAttach below).
     Startup_Detach();
+    XmlSaveDedupe_Detach();
     ContentProvider_Detach();
     GateFlash_Detach();
     NameFit_Detach();
@@ -229,6 +231,9 @@ static void DetourAttach()
     // The unit info title name fit (#22-2): one verified call retarget of its own.
     NameFit_Attach();
     PostQuest_Attach();
+    // Menu stutter: identical XMLFileProcessor.xml rewrites on every screen change.  Its own transaction, like the
+    // provider's, so a failure here cannot take any other hook down with it.
+    XmlSaveDedupe_Attach();
 }
 
 BOOL WINAPI DllMain(

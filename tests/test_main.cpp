@@ -38,6 +38,7 @@
 #include "cp_startup_internal.h"
 #include "fake_broker.h"
 #include "test_util.h"
+#include "../OfflineMod.win32/xml_save_dedupe_logic.h"
 
 using namespace cp;
 
@@ -4321,6 +4322,60 @@ std::string JoinKeys(const std::vector<std::string>& v)
 * provider reports it absent and refuses its read, and the game's own paths
 * take over (pending client observation).
 */
+// The menu-stutter XML save hook (xml_save_dedupe.cpp): a save is skipped only when it would rewrite the file
+// with exactly the text the last successful save wrote, and the file is still the size that save left.
+void TestXmlSaveDedupe()
+{
+    std::map<std::string, unsigned long long> disk;   // fake files: path -> size on disk
+    int writes = 0;
+    xmlsave::Deduper deduper([&](const std::string& path, unsigned long long* size) {
+        const auto it = disk.find(path);
+        if (it == disk.end())
+            return false;
+        *size = it->second;
+        return true;
+    });
+    // `result` is what the real save returns; text mode adds bytes on disk, so the stored size differs from text.
+    auto save = [&](const std::string& path, const std::string& text, int result = 0) {
+        bool skipped = false;
+        const int r = deduper.Save(path, text, [&]() {
+            ++writes;
+            if (result == 0)
+                disk[path] = text.size() + 3;
+            return result;
+        }, &skipped);
+        return std::make_pair(r, skipped);
+    };
+
+    auto r = save("a.xml", "<k>false</k>");
+    CHECK_MSG(!r.second && writes == 1, "the first save of a session always writes");
+    r = save("a.xml", "<k>false</k>");
+    CHECK_MSG(r.second && r.first == 0 && writes == 1, "an identical save is skipped and reports success");
+    r = save("a.xml", "<k>true</k>");
+    CHECK_MSG(!r.second && writes == 2, "changed text writes");
+    r = save("b.xml", "<k>true</k>");
+    CHECK_MSG(!r.second && writes == 3, "each path has its own record");
+    disk.erase("a.xml");
+    r = save("a.xml", "<k>true</k>");
+    CHECK_MSG(!r.second && writes == 4, "a deleted file is written again even when the text is identical");
+    disk["a.xml"] = 1;
+    r = save("a.xml", "<k>true</k>");
+    CHECK_MSG(!r.second && writes == 5, "a file resized by someone else is written again");
+    r = save("c.xml", "<y/>", 4);
+    CHECK_MSG(r.first == 4 && !r.second, "a failed save returns the real error");
+    r = save("c.xml", "<y/>");
+    CHECK_MSG(!r.second && writes == 7, "a failed save is not remembered: the next identical save writes");
+    r = save("c.xml", "<y/>");
+    CHECK_MSG(r.second, "after a successful write, the identical save is skipped");
+    CHECK_EQ(deduper.Skipped(), 2ull);
+    CHECK_EQ(deduper.Written(), 7ull);
+    CHECK(!xmlsave::ShouldSkip(nullptr, "x", true, 1));
+    xmlsave::Record rec{ "x", 4 };
+    CHECK(xmlsave::ShouldSkip(&rec, "x", true, 4));
+    CHECK(!xmlsave::ShouldSkip(&rec, "x", false, 4));
+    CHECK(!xmlsave::ShouldSkip(&rec, "y", true, 4));
+}
+
 void TestLiveVisibleSwap()
 {
     const char* portText = getenv("BF_SWAP_PORT");
@@ -5249,6 +5304,7 @@ int main()
     TestLiveAudio();
     TestLiveFamilyPolicy();
     TestLiveVisibleSwap();
+    TestXmlSaveDedupe();
     printf("content_provider_tests: %d passed, %d failed, %d skipped\n", t::counters().passed, t::counters().failed,
            t::counters().skipped);
     return t::counters().failed ? 1 : 0;

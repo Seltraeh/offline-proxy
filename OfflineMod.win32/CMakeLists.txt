@@ -7,6 +7,9 @@ add_library(offlineproxy SHARED
     console_log.h
     fps_cap.cpp
     fps_cap.h
+    xml_save_dedupe.cpp
+    xml_save_dedupe.h
+    xml_save_dedupe_logic.h
     Source.def
     #Resource.rc
     resource.h
